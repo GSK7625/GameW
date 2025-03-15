@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    background: url('images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+}
+
+#startButton, #watchAdButton, #pauseButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+#startButton:hover, #watchAdButton:hover, #pauseButton:hover {
+    background-color: #45a049; /* Darker Green */
+}
+
+#gameCanvas {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#scoreBoard {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#healthBar {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    width: 200px;
+    height: 20px;
+    background: red;
+    border: 2px solid #000;
+    border-radius: 5px;
+    display: none;
+}
+
+#pauseButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#taskBar {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #000;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#taskBar div {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border: 1px solid #000;
+    border-radius: 3px;
+}
