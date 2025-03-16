@@ -82,70 +82,43 @@ function drawPlayer() {
 }
 
 function updatePlayer() {
-    let movingHorizontally = false;
-    let movingVertically = false;
-
-    if (keys['ArrowUp'] || keys['KeyW']) {
-        player.dy = -player.speed;
-        movingVertically = true;
-    } else if (keys['ArrowDown'] || keys['KeyS']) {
-        player.dy = player.speed;
-        movingVertically = true;
-    } else {
-        player.dy = 0;
-    }
-
-    if (keys['ArrowLeft'] || keys['KeyA']) {
-        player.dx = -player.speed;
-        movingHorizontally = true;
-    } else if (keys['ArrowRight'] || keys['KeyD']) {
-        player.dx = player.speed;
-        movingHorizontally = true;
-    } else {
-        player.dx = 0;
-    }
-
-    // Adjust speed when moving diagonally
-    if (movingHorizontally && movingVertically) {
-        player.dx *= Math.SQRT1_2; // 1 / sqrt(2)
-        player.dy *= Math.SQRT1_2; // 1 / sqrt(2)
-    }
-
-    // Update direction based on movement
-    if (keys['ArrowUp'] || keys['KeyW']) {
-        player.direction = -Math.PI / 2;
-    }
-    if (keys['ArrowDown'] || keys['KeyS']) {
-        player.direction = Math.PI / 2;
-    }
-    if (keys['ArrowLeft'] || keys['KeyA']) {
-        player.direction = Math.PI;
-    }
-    if (keys['ArrowRight'] || keys['KeyD']) {
-        player.direction = 0;
-    }
+    let isDiagonal = false;
+    player.dx = (keys['ArrowRight'] || keys['KeyD']) ? player.speed : (keys['ArrowLeft'] || keys['KeyA']) ? -player.speed : 0;
+    player.dy = (keys['ArrowUp'] || keys['KeyW']) ? -player.speed : (keys['ArrowDown'] || keys['KeyS']) ? player.speed : 0;
 
     if ((keys['ArrowUp'] || keys['KeyW']) && (keys['ArrowRight'] || keys['KeyD'])) {
         player.direction = -Math.PI / 4;
-    }
-    if ((keys['ArrowUp'] || keys['KeyW']) && (keys['ArrowLeft'] || keys['KeyA'])) {
+        isDiagonal = true;
+    } else if ((keys['ArrowUp'] || keys['KeyW']) && (keys['ArrowLeft'] || keys['KeyA'])) {
         player.direction = -3 * Math.PI / 4;
-    }
-    if ((keys['ArrowDown'] || keys['KeyS']) && (keys['ArrowRight'] || keys['KeyD'])) {
+        isDiagonal = true;
+    } else if ((keys['ArrowDown'] || keys['KeyS']) && (keys['ArrowRight'] || keys['KeyD'])) {
         player.direction = Math.PI / 4;
-    }
-    if ((keys['ArrowDown'] || keys['KeyS']) && (keys['ArrowLeft'] || keys['KeyA'])) {
+        isDiagonal = true;
+    } else if ((keys['ArrowDown'] || keys['KeyS']) && (keys['ArrowLeft'] || keys['KeyA'])) {
         player.direction = 3 * Math.PI / 4;
+        isDiagonal = true;
+    } else if (keys['ArrowUp'] || keys['KeyW']) {
+        player.direction = -Math.PI / 2;
+    } else if (keys['ArrowDown'] || keys['KeyS']) {
+        player.direction = Math.PI / 2;
+    } else if (keys['ArrowLeft'] || keys['KeyA']) {
+        player.direction = Math.PI;
+    } else if (keys['ArrowRight'] || keys['KeyD']) {
+        player.direction = 0;
+    }
+
+    if (isDiagonal) {
+        player.dx /= Math.sqrt(2);
+        player.dy /= Math.sqrt(2);
     }
 
     player.x += player.dx;
     player.y += player.dy;
 
     // Prevent player from moving out of canvas bounds
-    if (player.x < 0) player.x = 0;
-    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-    if (player.y < 0) player.y = 0;
-    if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+    player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
+    player.y = Math.max(0, Math.min(player.y, canvas.height - player.height));
 }
 
 function handleObstacles() {
@@ -563,3 +536,16 @@ window.addEventListener('keyup', function(e) {
             spacePressed = false; // Reset space key state when released
             break;
     }
+});
+
+startButton.addEventListener('click', startGame);
+watchAdButton.addEventListener('click', watchAd);
+pauseButton.addEventListener('click', togglePause);
+
+background.onload = function() {
+    startButton.style.display = 'block';
+    canvas.style.display = 'none';
+    scoreBoard.style.display = 'none';
+    healthBar.style.display = 'none';
+    taskBar.style.display = 'none';
+};
