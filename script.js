@@ -82,22 +82,36 @@ function drawPlayer() {
 }
 
 function updatePlayer() {
+    let movingHorizontally = false;
+    let movingVertically = false;
+
     if (keys['ArrowUp'] || keys['KeyW']) {
         player.dy = -player.speed;
+        movingVertically = true;
     } else if (keys['ArrowDown'] || keys['KeyS']) {
         player.dy = player.speed;
+        movingVertically = true;
     } else {
         player.dy = 0;
     }
 
     if (keys['ArrowLeft'] || keys['KeyA']) {
         player.dx = -player.speed;
+        movingHorizontally = true;
     } else if (keys['ArrowRight'] || keys['KeyD']) {
         player.dx = player.speed;
+        movingHorizontally = true;
     } else {
         player.dx = 0;
     }
 
+    // Adjust speed when moving diagonally
+    if (movingHorizontally && movingVertically) {
+        player.dx *= Math.SQRT1_2; // 1 / sqrt(2)
+        player.dy *= Math.SQRT1_2; // 1 / sqrt(2)
+    }
+
+    // Update direction based on movement
     if (keys['ArrowUp'] || keys['KeyW']) {
         player.direction = -Math.PI / 2;
     }
@@ -549,16 +563,3 @@ window.addEventListener('keyup', function(e) {
             spacePressed = false; // Reset space key state when released
             break;
     }
-});
-
-startButton.addEventListener('click', startGame);
-watchAdButton.addEventListener('click', watchAd);
-pauseButton.addEventListener('click', togglePause);
-
-background.onload = function() {
-    startButton.style.display = 'block';
-    canvas.style.display = 'none';
-    scoreBoard.style.display = 'none';
-    healthBar.style.display = 'none';
-    taskBar.style.display = 'none';
-};
