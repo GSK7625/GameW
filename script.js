@@ -31,6 +31,7 @@ let buffs = {
     speed: 0,
     jump: 0
 };
+let playerBulletDelay = 0; // Add delay for player bullets
 
 let player = {
     x: 50,
@@ -195,13 +196,14 @@ function handleBoss() {
 
         // Boss shooting
         if (frame % 100 === 0) {
+            const angleToPlayer = Math.atan2(player.y - (boss.y + boss.height / 2), player.x - (boss.x + boss.width / 2));
             bossBullets.push({
                 x: boss.x + boss.width / 2,
                 y: boss.y + boss.height / 2,
                 width: bulletWidth,
                 height: bulletHeight,
-                speed: 5,
-                direction: boss.direction // Shoot in the direction boss is moving
+                speed: 20,
+                direction: angleToPlayer // Aim at the player
             });
         }
 
@@ -324,6 +326,7 @@ function gameLoop() {
     if (frame % 500 === 0) {
         speedMultiplier += 0.1; // Increase speed every 500 frames
     }
+    if (playerBulletDelay > 0) playerBulletDelay--; // Decrease delay
     requestAnimationFrame(gameLoop);
 }
 
@@ -416,7 +419,7 @@ function moveDown(isPressed) {
 }
 
 function shoot() {
-    if (!spacePressed) {
+    if (!spacePressed && playerBulletDelay === 0) { // Check delay
         playerBullets.push({
             x: player.x + player.width / 2,
             y: player.y + player.height / 2,
@@ -426,6 +429,7 @@ function shoot() {
             direction: player.direction
         });
         spacePressed = true; // Set space key state to pressed
+        playerBulletDelay = 20; // Set delay (e.g., 20 frames)
     }
 }
 
