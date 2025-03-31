@@ -202,7 +202,7 @@ function handleBoss() {
                 y: boss.y + boss.height / 2,
                 width: bulletWidth,
                 height: bulletHeight,
-                speed: 20,
+                speed: 15,
                 direction: angleToPlayer // Aim at the player
             });
         }
