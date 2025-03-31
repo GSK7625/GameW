@@ -13,6 +13,9 @@ const jumpSound = document.getElementById('jumpSound');
 const collisionSound = document.getElementById('collisionSound');
 const gameOverSound = document.getElementById('gameOverSound');
 
+const gameOverImage = document.getElementById('gameOverImage');
+const bossDefeatedImage = document.getElementById('bossDefeatedImage');
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -216,6 +219,17 @@ function handleBoss() {
                 endGame();
             }
         }
+
+        if (boss.health <= 0) {
+            boss = null;
+            bossSpawned = false;
+            score += 50;
+            scoreElement.textContent = score;
+            bossDefeatedImage.style.display = 'block'; // Show boss defeated image
+            setTimeout(() => {
+                bossDefeatedImage.style.display = 'none'; // Hide boss defeated image after 3 seconds
+            }, 3000);
+        }
     }
 }
 
@@ -386,7 +400,11 @@ function endGame() {
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
     gameOverSound.play();
+    gameOverImage.style.display = 'block'; // Show game over image
     alert('Game Over! Your score: ' + score);
+    setTimeout(() => {
+        gameOverImage.style.display = 'none'; // Hide game over image after alert
+    }, 3000);
 }
 
 function checkCollision(a, b) {
